@@ -7,7 +7,6 @@ import 'package:spends_app/src/widgets/my_btn2.dart';
 
 class LoginPage extends StatefulWidget {
   static final pageName = 'LoginPageRoute';
-  String keySharePrefs = 'wasLogin';
 
   @override
   _LoginPageState createState() => _LoginPageState();

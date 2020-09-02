@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spends_app/src/pages/home_page_tabs/add_spend_tab.dart';
 import 'package:spends_app/src/pages/home_page_tabs/all_spends_tab.dart';
 import 'package:spends_app/src/pages/home_page_tabs/home_tab.dart';
+import 'package:spends_app/src/pages/home_page_tabs/settings_tab.dart';
 import 'package:spends_app/src/widgets/bottom_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:spends_app/src/widgets/my_appbar.dart';
@@ -30,6 +31,10 @@ class _HomePageState extends State<HomePage> {
         iconPath: 'assets/icons/list.svg',
         label: 'All',
         content: AllSpendsTab()),
+    BottomMenuItem(
+        iconPath: 'assets/icons/settings3.svg',
+        label: 'Ajustes',
+        content: SettingsTab()),
   ];
 
   @override
@@ -62,13 +67,18 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           child: Column(
             children: [
+
+              // se deja construido para un próximo uso
               MyAppBar(
-                rightIcon: 'assets/icons/settings2.svg',
-                onRightClick: () {
-                  // final route = MaterialPageRoute(builder: (context) => SettingsPage());
-                  // Navigator.push(context, route);
-                  Navigator.pushNamed(context, 'SettingsPageRoute');
-                },
+                label: 'Gastos App',
+                // rightIcon: 'assets/icons/settings2.svg',
+                // onRightClick: () {
+                //   // final route = MaterialPageRoute(builder: (context) => SettingsPage());
+                //   // Navigator.push(context, route);
+                //   Navigator.pushNamed(context, 'SettingsPageRoute');
+                // },
+                // leftIcon: 'assets/icons/settings2.svg',
+                // onLeftClick: () => Navigator.pushNamed(context, 'SettingsPageRoute'),
               ),
               Expanded(
                 child: MyPageView(
