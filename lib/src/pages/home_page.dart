@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:spends_app/src/pages/add_spend_page.dart';
-import 'package:spends_app/src/pages/all_spends.dart';
+import 'package:spends_app/src/pages/home_page_tabs/add_spend_tab.dart';
+import 'package:spends_app/src/pages/home_page_tabs/all_spends_tab.dart';
+import 'package:spends_app/src/pages/home_page_tabs/home_tab.dart';
 import 'package:spends_app/src/widgets/bottom_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:spends_app/src/widgets/my_appbar.dart';
+import 'package:spends_app/src/widgets/my_page_view.dart';
 
 class HomePage extends StatefulWidget {
   static final pageName = 'HomePageRoute';
@@ -13,44 +15,72 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  static final pageName = 'HomePageRoute';
+  int _currentPage = 0;
   
+  final _menuItems = [
+    BottomMenuItem(
+        iconPath: 'assets/icons/home.svg',
+        label: 'Home',
+        content: HomeTab()),
+    BottomMenuItem(
+        iconPath: 'assets/icons/add.svg',
+        label: 'Add',
+        content: AddSpendTab()),
+    BottomMenuItem(
+        iconPath: 'assets/icons/list.svg',
+        label: 'All',
+        content: AllSpendsTab()),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
-      backgroundColor: Colors.blue[400],
-        bottomNavigationBar: BottomMenu(items: [
-          BottomMenuItem(iconPath: 'assets/icons/home.svg', label: 'Home', nav: pageName),
-          BottomMenuItem(iconPath: 'assets/icons/add.svg', label: 'Add', nav: AddSpendPage.pageName),
-          BottomMenuItem(iconPath: 'assets/icons/list.svg', label: 'All', nav: AllSpendsPage.pageName),
-        ]),
+    return Scaffold(
+        backgroundColor: Colors.blue[400],
+        bottomNavigationBar: BottomMenu(
+            currentPage: _currentPage,
+            items: _menuItems,
+            onChanged: (int newCurrentPage) {
+              setState(() {
+                _currentPage = newCurrentPage;
+                
+              });
+            }),
         body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.white,
-            child: Column(
-              children: [
-                MyAppBar(
-                  rightIcon: 'assets/icons/settings2.svg',
-                  onRightClick: (){
-                    // final route = MaterialPageRoute(builder: (context) => SettingsPage());
-                    // Navigator.push(context, route);
-                    Navigator.pushNamed(context, 'SettingsPageRoute');
-                  },
-                ),
-                Expanded(
-                  child: 
-                    Center(child: Text('Contenido de la pag de gastos')))
-              ],
-            ),
-          )
-        )
-      );
+            child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white,
+          child: Column(
+            children: [
+              MyAppBar(
+                rightIcon: 'assets/icons/settings2.svg',
+                onRightClick: () {
+                  // final route = MaterialPageRoute(builder: (context) => SettingsPage());
+                  // Navigator.push(context, route);
+                  Navigator.pushNamed(context, 'SettingsPageRoute');
+                },
+              ),
+              Expanded(
+                child: MyPageView(
+                  children: _menuItems.map((item) => item.content).toList(),
+                  currentPage: _currentPage,
+                )
+              )
+            ],
+          ),
+        )));
   }
 }
-
 
 // CupertinoButton(
 //           minSize: 0,
