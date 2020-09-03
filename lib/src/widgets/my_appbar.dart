@@ -16,6 +16,7 @@ class MyAppBar extends StatelessWidget {
   }
 
   Widget _buildAppBar() {
+    // if (this.leftIcon != null) 'widget'
     final double _paddingEdgeInsetsAll = 15;
     if (this.leftIcon != null && this.rightIcon != null) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

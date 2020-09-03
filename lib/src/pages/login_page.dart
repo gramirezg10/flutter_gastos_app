@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spends_app/src/pages/home_page.dart';
+import 'package:spends_app/src/util/dialogs.dart';
 import 'package:spends_app/src/widgets/my_btn2.dart';
 
 class LoginPage extends StatefulWidget {
@@ -97,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                                     width: 10,
                                     height: 10,
                                     child: SvgPicture.asset(
-                                        'assets/icons/padlock.svg',
-                                        color: Colors.black54,
-                                        ))),
+                                      'assets/icons/padlock.svg',
+                                      color: Colors.black54,
+                                    ))),
                             obscureText: true,
                             keyboardType: TextInputType.text,
                             keyboardAppearance: Brightness.light,
@@ -185,16 +186,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     final bool isValid = _formKey.currentState.validate();
-    if (isValid) {
+    if (isValid && _email == '@.' && _password == '123456') {
       // llamada al back
       print('go to backend $_email, $_password');
 
       // falta hacer la validación en el back
 
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setBool('wasLogin', true);
       Navigator.pushNamed(context, HomePage.pageName);
+    } else {
+      await Dialogs.alert(
+        context,
+        title: 'Error al iniciar sesión',
+        body: 'credenciales inválidas',
+      );
     }
   }
 
