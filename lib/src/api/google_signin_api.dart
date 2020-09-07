@@ -16,16 +16,18 @@ class GoogleSignInApi {
       //validar el token con el backend
 
       // Local
-      String url = 'http://192.168.0.11:3000/logingoogle';
-      final http.Response response =
-          await http.post(url, body: {'idToken': googleKey.idToken});
-      print(response.body);
+      // String url = 'http://192.168.0.11:3000/logingoogle';
+      // final http.Response response =
+      //     await http.post(url, body: {'idToken': googleKey.idToken});
+      // print(response.body);
 
       // // Server
-      // final signInWithGoogleEndpoint =
-      //     Uri(scheme: 'https', host: 'url de heroku', path: '/logingoogle');
-      // final response = await http
-      //     .post(signInWithGoogleEndpoint, body: {'idToken': googleKey.idToken});
+      final signInWithGoogleEndpoint = Uri(
+          scheme: 'https',
+          host: 'gramirez-spends-app-backend.herokuapp.com',
+          path: '/logingoogle');
+      final response = await http
+          .post(signInWithGoogleEndpoint, body: {'idToken': googleKey.idToken});
 
       //
       return response.body;

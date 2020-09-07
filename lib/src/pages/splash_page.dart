@@ -20,16 +20,13 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
   @override
   void afterFirstLayout(BuildContext context) {
     Future.delayed(Duration(seconds: 2)).then((value){
-      print('go to home');
       this._checkLoggin();
-      
     });
   }
 
   _checkLoggin() async{ 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool wasLogin = prefs.getBool('wasLogin');
-    print('---wasLogin: --- $wasLogin');
     if (wasLogin == null){
       Navigator.pushReplacementNamed(context, LoginPage.pageName);
     } else {
