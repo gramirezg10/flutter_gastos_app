@@ -6,6 +6,8 @@ class MyBtn2 extends StatelessWidget {
   final VoidCallback onPressed;
   final bool fullWidth;
   final EdgeInsets padding;
+  final IconData icon;
+  final Color color;
 
   final Color backgroundColor, textColor;
 
@@ -15,6 +17,8 @@ class MyBtn2 extends StatelessWidget {
       this.onPressed,
       this.fullWidth = false,
       this.padding,
+      this.icon,
+      this.color,
       this.backgroundColor,
       this.textColor})
       : assert(label != null),
@@ -27,14 +31,20 @@ class MyBtn2 extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Container(
         width: fullWidth ? double.infinity : null,
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        child: Text(
-          this.label,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: this.textColor ?? Colors.black,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.5),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            if(this.icon != null) Icon(this.icon, color: this.color ?? Colors.white),
+            Text(
+              this.label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: this.textColor ?? Colors.black,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5),
+            ),
+          ],
         ),
         decoration: BoxDecoration(
           color: this.backgroundColor ?? Colors.white,

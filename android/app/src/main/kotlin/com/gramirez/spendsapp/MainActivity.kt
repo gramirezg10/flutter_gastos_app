@@ -1,4 +1,4 @@
-package com.example.spends_app
+package com.gramirez.spendsapp
 
 import io.flutter.embedding.android.FlutterActivity
 

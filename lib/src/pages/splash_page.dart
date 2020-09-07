@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
   _checkLoggin() async{ 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool wasLogin = prefs.getBool('wasLogin');
-    print('wasLogin es --- $wasLogin');
+    print('---wasLogin: --- $wasLogin');
     if (wasLogin == null){
       Navigator.pushReplacementNamed(context, LoginPage.pageName);
     } else {

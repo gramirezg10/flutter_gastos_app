@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spends_app/src/api/google_signin_api.dart';
+import 'package:spends_app/src/api/spend_api.dart';
 import 'package:spends_app/src/pages/home_page.dart';
 import 'package:spends_app/src/util/dialogs.dart';
 import 'package:spends_app/src/widgets/my_btn2.dart';
@@ -15,6 +19,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FocusNode _focusNodePassword = FocusNode();
+  SpendAPI _spendAPI = SpendAPI();
+
   GlobalKey<FormState> _formKey = GlobalKey();
   String _email = '', _password = '';
 
@@ -64,82 +70,83 @@ class _LoginPageState extends State<LoginPage> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                                labelText: 'E-mail',
-                                hintText: 'example@domain.com',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                prefixIcon: Container(
-                                    padding: EdgeInsets.all(10),
-                                    width: 10,
-                                    height: 10,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/mail.svg',
-                                      color: Colors.black54,
-                                    ))),
-                            keyboardType: TextInputType.emailAddress,
-                            keyboardAppearance: Brightness.light,
-                            textInputAction: TextInputAction.next,
-                            validator: _validateEmail,
-                            onFieldSubmitted: (text) {
-                              _focusNodePassword.nextFocus();
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                labelText: 'Password',
-                                hintText: '**********',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                prefixIcon: Container(
-                                    padding: EdgeInsets.all(10),
-                                    width: 10,
-                                    height: 10,
-                                    child: SvgPicture.asset(
-                                      'assets/icons/padlock.svg',
-                                      color: Colors.black54,
-                                    ))),
-                            obscureText: true,
-                            keyboardType: TextInputType.text,
-                            keyboardAppearance: Brightness.light,
-                            focusNode: _focusNodePassword,
-                            textInputAction: TextInputAction.send,
-                            validator: _validatePassword,
-                            onFieldSubmitted: (text) => _submit(),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              CupertinoButton(
-                                  padding: EdgeInsets.zero,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text('Recuperar contraseña'),
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.blue,
-                                                width: 1.0))),
-                                  ),
-                                  onPressed: () =>
-                                      print('click en recuperar contraseña'))
-                            ],
-                          ),
-                          SizedBox(height: 30),
-                          MyBtn2(
-                              label: 'Login',
-                              fullWidth: true,
-                              onPressed: _submit,
-                              backgroundColor: Color(0xFF039be5),
-                              textColor: Colors.white),
-                          SizedBox(height: 30),
-                          Text('O inicia con: '),
-                          SizedBox(height: 15),
+                          // TextFormField(
+                          //   decoration: InputDecoration(
+                          //       labelText: 'E-mail',
+                          //       hintText: 'example@domain.com',
+                          //       border: OutlineInputBorder(
+                          //           borderRadius: BorderRadius.circular(15)),
+                          //       prefixIcon: Container(
+                          //           padding: EdgeInsets.all(10),
+                          //           width: 10,
+                          //           height: 10,
+                          //           child: SvgPicture.asset(
+                          //             'assets/icons/mail.svg',
+                          //             color: Colors.black54,
+                          //           ))),
+                          //   keyboardType: TextInputType.emailAddress,
+                          //   keyboardAppearance: Brightness.light,
+                          //   textInputAction: TextInputAction.next,
+                          //   validator: _validateEmail,
+                          //   onFieldSubmitted: (text) {
+                          //     _focusNodePassword.nextFocus();
+                          //   },
+                          // ),
+                          // SizedBox(height: 20),
+                          // TextFormField(
+                          //   decoration: InputDecoration(
+                          //       labelText: 'Password',
+                          //       hintText: '**********',
+                          //       border: OutlineInputBorder(
+                          //           borderRadius: BorderRadius.circular(15)),
+                          //       prefixIcon: Container(
+                          //           padding: EdgeInsets.all(10),
+                          //           width: 10,
+                          //           height: 10,
+                          //           child: SvgPicture.asset(
+                          //             'assets/icons/padlock.svg',
+                          //             color: Colors.black54,
+                          //           ))),
+                          //   obscureText: true,
+                          //   keyboardType: TextInputType.text,
+                          //   keyboardAppearance: Brightness.light,
+                          //   focusNode: _focusNodePassword,
+                          //   textInputAction: TextInputAction.send,
+                          //   validator: _validatePassword,
+                          //   onFieldSubmitted: (text) => _submit(''),
+                          // ),
+                          // SizedBox(height: 5),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.end,
+                          //   children: [
+                          //     CupertinoButton(
+                          //         padding: EdgeInsets.zero,
+                          //         child: Container(
+                          //           padding: EdgeInsets.symmetric(vertical: 10),
+                          //           margin:
+                          //               EdgeInsets.symmetric(horizontal: 10),
+                          //           child: Text('Recuperar contraseña'),
+                          //           decoration: BoxDecoration(
+                          //               border: Border(
+                          //                   bottom: BorderSide(
+                          //                       color: Colors.blue,
+                          //                       width: 1.0))),
+                          //         ),
+                          //         onPressed: () =>
+                          //             print('click en recuperar contraseña'))
+                          //   ],
+                          // ),
+                          // SizedBox(height: 30),
+                          // MyBtn2(
+                          //   label: 'Login',
+                          //   fullWidth: true,
+                          //   onPressed: () => _submit(''),
+                          //   backgroundColor: Color(0xFF039be5),
+                          //   textColor: Colors.white,
+                          // ),
+                          // SizedBox(height: 30),
+                          // Text('O inicia con: '),
+                          // SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -147,27 +154,25 @@ class _LoginPageState extends State<LoginPage> {
                                 child: MyBtn2(
                                   label: 'Gmail',
                                   fullWidth: true,
-                                  onPressed: () {
-                                    print('call google auth');
-                                  },
+                                  onPressed: () => _submit('google'),
                                   backgroundColor: Color(0xFFc62828),
                                   textColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 15),
+                                  icon: FontAwesomeIcons.google,
+                                  color: Colors.white,
                                 ),
                               ),
                               SizedBox(width: 15),
                               Expanded(
                                 child: MyBtn2(
-                                  label: 'Facebook',
+                                  label: 'Apple',
                                   fullWidth: true,
                                   onPressed: () {
                                     print('call facebook auth');
                                   },
-                                  backgroundColor: Color(0xFF005b9f),
-                                  textColor: Colors.white,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 15),
+                                  backgroundColor: Colors.white60,
+                                  textColor: Colors.black,
+                                  icon: FontAwesomeIcons.apple,
+                                  color: Colors.black,
                                 ),
                               ),
                             ],
@@ -184,39 +189,57 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submit() async {
+  Future _submit(String authType) async {
     final bool isValid = _formKey.currentState.validate();
-    if (isValid && _email == '@.' && _password == '123456') {
-      // llamada al back
-      print('go to backend $_email, $_password');
 
-      // falta hacer la validación en el back
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('wasLogin', true);
-      Navigator.pushNamed(context, HomePage.pageName);
-    } else {
-      await Dialogs.alert(
-        context,
-        title: 'Error al iniciar sesión',
-        body: 'credenciales inválidas',
-      );
+    switch (authType.toUpperCase()) {
+      case 'GOOGLE':
+        final resultAuth = await GoogleSignInApi.signInWithGoogle();
+        final dynamic parsed = jsonDecode(resultAuth);
+        if (resultAuth != null && parsed['ok']) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('wasLoginWith', 'GOOGLE');
+          Navigator.pushNamed(context, HomePage.pageName);
+        } else 
+          Dialogs.alert(context,
+              title: 'Error al autenticarse con Google',
+              body:
+                  'Se presentó durante la comunicación con Google, finalice la aplicación e inténtelo de nuevo.');
+        break;
+      case 'APPLE':
+        break;
+      default:
+        if (isValid && _email == '@.' && _password == '123456') {
+          // llamada al back
+          print('go to backend $_email, $_password');
+          // falta hacer la validación en el back
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('wasLoginWith', 'NORMAL');
+          Navigator.pushNamed(context, HomePage.pageName);
+        } else {
+          await Dialogs.alert(
+            context,
+            title: 'Error al iniciar sesión',
+            body: 'credenciales inválidas',
+          );
+        }
+        break;
     }
   }
 
-  String _validateEmail(String email) {
-    if (email.isNotEmpty && email.contains('@') && email.contains('.')) {
-      _email = email;
-      return null;
-    }
-    return 'Email inválido';
-  }
+  // String _validateEmail(String email) {
+  //   if (email.isNotEmpty && email.contains('@') && email.contains('.')) {
+  //     _email = email;
+  //     return null;
+  //   }
+  //   return 'Email inválido';
+  // }
 
-  String _validatePassword(String password) {
-    if (password.isNotEmpty && password.length > 4) {
-      _password = password;
-      return null;
-    }
-    return 'Contraseña inválida';
-  }
+  // String _validatePassword(String password) {
+  //   if (password.isNotEmpty && password.length > 4) {
+  //     _password = password;
+  //     return null;
+  //   }
+  //   return 'Contraseña inválida';
+  // }
 }

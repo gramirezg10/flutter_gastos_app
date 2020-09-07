@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spends_app/src/api/google_signin_api.dart';
 import 'package:spends_app/src/pages/login_page.dart';
 import 'package:spends_app/src/util/dialogs.dart';
 
@@ -13,9 +14,22 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   _logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    Navigator.pushNamedAndRemoveUntil(
-        context, LoginPage.pageName, (route) => false);
+    final authType = prefs.getString('wasLoginWith');
+    switch (authType.toUpperCase()) {
+      case 'GOOGLE':
+        GoogleSignInApi.signOut();
+        await prefs.clear();
+        Navigator.pushNamedAndRemoveUntil(context, LoginPage.pageName, (route) => false);
+        break;
+
+      case 'APPLE':
+        break;
+
+      default:
+        await prefs.clear();
+        Navigator.pushNamedAndRemoveUntil(context, LoginPage.pageName, (route) => false);
+        break;
+    }
   }
 
   _confirmLogout() async {

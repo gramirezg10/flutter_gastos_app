@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>88969911991-h8aebdgml62llo5pn7uad6rf5a19jv6l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.88969911991-h8aebdgml62llo5pn7uad6rf5a19jv6l</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>88969911991-a7mbj2vcfalt16qll0hp2vcbp9oqrhrq.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDVi8qK474HVLOFZcNU7qWRR61cIb8D12I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>88969911991</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gramirez.spendsapp</string>
+	<key>PROJECT_ID</key>
+	<string>fir-spends-app-signin</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fir-spends-app-signin.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:88969911991:ios:cd7bc71e5af44dc8faf732</string>
+	<key>DATABASE_URL</key>
+	<string>https://fir-spends-app-signin.firebaseio.com</string>
+</dict>
+</plist>
