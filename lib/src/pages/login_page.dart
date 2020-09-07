@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spends_app/src/api/google_signin_api.dart';
-import 'package:spends_app/src/api/spend_api.dart';
 import 'package:spends_app/src/pages/home_page.dart';
 import 'package:spends_app/src/util/dialogs.dart';
 import 'package:spends_app/src/widgets/my_btn2.dart';
@@ -19,7 +18,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FocusNode _focusNodePassword = FocusNode();
-  SpendAPI _spendAPI = SpendAPI();
 
   GlobalKey<FormState> _formKey = GlobalKey();
   String _email = '', _password = '';
