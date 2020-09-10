@@ -12,7 +12,7 @@ class MyAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.blue, child: _buildAppBar());
+    return Container(color: Colors.white60, child: _buildAppBar());
   }
 
   Widget _buildAppBar() {
@@ -57,10 +57,10 @@ class MyAppBar extends StatelessWidget {
           alignment: Alignment.center,
           child: Text('Gastos App',
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2.0,
-                  color: Colors.white70)),
+                  color: Colors.black87)),
         ),
       ],
     );

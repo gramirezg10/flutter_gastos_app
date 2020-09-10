@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(10),
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(40.0),
                           child: Image.asset('assets/pictures/spends.png')),
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       'Gastos App',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 2.0,
                           color: Colors.black54),
