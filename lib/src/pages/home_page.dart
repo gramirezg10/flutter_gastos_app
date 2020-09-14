@@ -67,7 +67,6 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           child: Column(
             children: [
-
               // se deja construido para un próximo uso
               MyAppBar(
                 label: 'Gastos App',
@@ -80,6 +79,7 @@ class _HomePageState extends State<HomePage> {
                 // leftIcon: 'assets/icons/settings2.svg',
                 // onLeftClick: () => Navigator.pushNamed(context, 'SettingsPageRoute'),
               ),
+              Divider(color: Colors.black26),
               Expanded(
                 child: MyPageView(
                   children: _menuItems.map((item) => item.content).toList(),

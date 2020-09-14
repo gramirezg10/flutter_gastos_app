@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:spends_app/src/config/routes.dart';
 import 'package:spends_app/src/pages/splash_page.dart';
 
@@ -18,6 +19,8 @@ class MyApp extends StatelessWidget {
         if (focus.hasPrimaryFocus) focus.unfocus();
       },
       child: MaterialApp(
+        localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+        supportedLocales: [const Locale('en'), const Locale('es')],
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         home: SplashPage(),

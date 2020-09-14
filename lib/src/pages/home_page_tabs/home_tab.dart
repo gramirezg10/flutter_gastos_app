@@ -101,6 +101,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ])),
                   Divider(height: 20),
+                  Text('Gastos generales', style: TextStyle(fontSize: _sizeS, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (_, i) {
@@ -129,6 +130,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                   Divider(height: 20),
+                  Text('Gastos de la casa', style: TextStyle(fontSize: _sizeS, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (_, i) {
