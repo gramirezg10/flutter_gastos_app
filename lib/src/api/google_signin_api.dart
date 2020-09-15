@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:spends_app/src/util/conection.dart';
 
 class GoogleSignInApi {
   static GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -13,23 +14,10 @@ class GoogleSignInApi {
       final account = await _googleSignIn.signIn();
       final googleKey = await account.authentication;
 
-      //validar el token con el backend
-
-      // Local
-      // String url = 'http://192.168.0.11:3000/logingoogle';
-      // final http.Response response =
-      //     await http.post(url, body: {'idToken': googleKey.idToken});
-      // print(response.body);
-
-      // // Server
-      final signInWithGoogleEndpoint = Uri(
-          scheme: 'https',
-          host: 'gramirez-spends-app-backend.herokuapp.com',
-          path: '/logingoogle');
+      final signInWithGoogleEndpoint = Connection.createConnection('logingoogle');
       final response = await http
           .post(signInWithGoogleEndpoint, body: {'idToken': googleKey.idToken});
 
-      //
       return response.body;
     } catch (e) {
       print('-----catch (account) en google signin-----');
