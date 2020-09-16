@@ -149,10 +149,20 @@ class _LoginPageState extends State<LoginPage> {
                               // SizedBox(height: 30),
                               // Text('O inicia con: '),
                               // SizedBox(height: 15),
+                              Center(
+                                child: Text('Ingresar con:',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.5,
+                                        color: Colors.black54)),
+                              ),
+                              SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  SizedBox(width: 90),
                                   Expanded(
                                     child: MyBtn2(
                                       label: 'Gmail',
@@ -164,20 +174,20 @@ class _LoginPageState extends State<LoginPage> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(width: 15),
-                                  Expanded(
-                                    child: MyBtn2(
-                                      label: 'Apple',
-                                      fullWidth: true,
-                                      onPressed: () {
-                                        print('call facebook auth');
-                                      },
-                                      backgroundColor: Colors.white60,
-                                      textColor: Colors.black,
-                                      icon: FontAwesomeIcons.apple,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                  SizedBox(width: 90),
+                                  // Expanded(
+                                  //   child: MyBtn2(
+                                  //     label: 'Apple',
+                                  //     fullWidth: true,
+                                  //     onPressed: () {
+                                  //       print('call apple auth');
+                                  //     },
+                                  //     backgroundColor: Colors.white60,
+                                  //     textColor: Colors.black,
+                                  //     icon: FontAwesomeIcons.apple,
+                                  //     color: Colors.black,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                               SizedBox(height: 30),
@@ -189,14 +199,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          if (_isFetching) Positioned.fill(child: Container(
-            color: Colors.white70,
-            child: Center(
-              child: CupertinoActivityIndicator(
-                radius: 15,
+          if (_isFetching)
+            Positioned.fill(
+              child: Container(
+                color: Colors.white70,
+                child: Center(
+                  child: CupertinoActivityIndicator(
+                    radius: 15,
+                  ),
+                ),
               ),
-            ),
-          ),)
+            )
         ],
       )),
     );
