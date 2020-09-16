@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spends_app/src/models/spend_model.dart';
 import 'package:spends_app/src/config/conection.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -60,7 +59,7 @@ class SpendAPI {
             'sd_homeDetail': jsonEncode(_hdList),
           });
       print(response.data['msg']);
-      return response.data['spend'];
+      return response.data['ok'];
     } catch (e) {
       print(e);
       return;

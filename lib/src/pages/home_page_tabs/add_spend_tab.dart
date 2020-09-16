@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:spends_app/src/api/spend_api.dart';
-import 'package:spends_app/src/api/test_api.dart';
 import 'package:spends_app/src/models/home_detail_model.dart';
 import 'package:spends_app/src/models/spend_detail_model.dart';
 import 'package:spends_app/src/models/spend_model.dart';
@@ -460,7 +459,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
     final _spendsData = await _spendAPI.postSpend(
         spend, _listSpendDetail, _listSpendHomeDetail);
     print('_loadData________________ $_spendsData');
-    if (_spendsData['_id'] != null) {
+    if (_spendsData) {
       Dialogs.alert(context, title: 'Ingreso creado');
       setState(() {
         _controllerDate.clear();

@@ -3,8 +3,8 @@ import 'package:spends_app/src/config/conection.dart';
 
 class TestAPI {
   Future getTest() async {
-    final strConection = Connection.createConnection('spendgetall');
-    final dio = Dio();
+    // final strConection = Connection.createConnection('spendgetall');
+    // final dio = Dio();
 
     // Future<SpendResponse> getSpend() async {
     //   try {
