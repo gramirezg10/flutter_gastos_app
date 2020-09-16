@@ -8,10 +8,7 @@ class Connection {
       // final String uri = 'https://reqres.in/$path';
     return uri;
     } else {
-      Uri uri = Uri(
-          scheme: 'https',
-          host: 'gramirez-spends-app-backend.herokuapp.com',
-          path: '/$path');
+      String uri = 'https://gramirez-spends-app-backend.herokuapp.com/$path';
       return uri;
     }
   }

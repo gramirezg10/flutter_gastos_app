@@ -1,3 +1,7 @@
+import 'package:spends_app/src/models/spend_detail_model.dart';
+
+import 'home_detail_model.dart';
+
 class Spend {
   // ignore: unused_field
   String id;
@@ -19,7 +23,7 @@ class Spend {
       // ignore: non_constant_identifier_names
       this.sd_spendDetail});
 
-  factory Spend.fromJson(Map<String, dynamic> parsedJson) {
+  factory Spend.fromJson(Map<dynamic, dynamic> parsedJson) {
     
     var listHD = parsedJson['sd_homeDetail'] as List;
     print('tipo de dato en lista de sd_homeDetail: ${listHD.runtimeType}'); //returns List<dynamic>
@@ -37,51 +41,5 @@ class Spend {
       sd_homeDetail: sdHomeDetailList,
       sd_spendDetail: sdSpendDetailList,
     );
-  }
-}
-
-class HomeDetail {
-  // ignore: unused_field
-  String id;
-  // ignore: non_constant_identifier_names
-  String HDDesc;
-  // ignore: non_constant_identifier_names
-  double HDAmount;
-
-  HomeDetail(
-      {this.id,
-      // ignore: non_constant_identifier_names
-      this.HDDesc,
-      // ignore: non_constant_identifier_names
-      this.HDAmount});
-
-  factory HomeDetail.fromJson(Map<String, dynamic> parsedJson) {
-    return HomeDetail(
-        id: parsedJson['id'],
-        HDDesc: parsedJson['HDDesc'],
-        HDAmount: parsedJson['HDAmount']);
-  }
-}
-
-class SpendDetail {
-  // ignore: unused_field
-  String id;
-  // ignore: non_constant_identifier_names
-  String SDDesc;
-  // ignore: non_constant_identifier_names
-  double SDAmount;
-
-  SpendDetail(
-      {this.id,
-      // ignore: non_constant_identifier_names
-      this.SDDesc,
-      // ignore: non_constant_identifier_names
-      this.SDAmount});
-
-  factory SpendDetail.fromJson(Map<String, dynamic> parsedJson) {
-    return SpendDetail(
-        id: parsedJson['id'],
-        SDDesc: parsedJson['SDDesc'],
-        SDAmount: parsedJson['SDAmount']);
   }
 }

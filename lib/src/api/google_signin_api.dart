@@ -1,6 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:spends_app/src/util/conection.dart';
+import 'package:spends_app/src/config/conection.dart';
 
 class GoogleSignInApi {
   static GoogleSignIn _googleSignIn = GoogleSignIn(

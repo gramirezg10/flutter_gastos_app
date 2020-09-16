@@ -20,9 +20,6 @@ class _AllSpendsTabState extends State<AllSpendsTab> {
     'Spend # 12'
   ];
 
-  
-
-
   @override
   Widget build(BuildContext context) {
     print('--- all spends tab');

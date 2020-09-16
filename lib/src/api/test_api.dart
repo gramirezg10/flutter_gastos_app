@@ -1,24 +1,40 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:spends_app/src/config/conection.dart';
 
 class TestAPI {
-  Future getTestAPI() async {
+  Future getTest() async {
+    final strConection = Connection.createConnection('spendgetall');
+    final dio = Dio();
+
+    // Future<SpendResponse> getSpend() async {
+    //   try {
+    //     Response response = await dio.get(strConection);
+    //     return SpendResponse.fromJson(response.data);
+    //   } catch (error, stacktrace) {
+    //     print("Exception occured: $error stackTrace: $stacktrace");
+    //     return SpendResponse.withError("$error");
+    //   }
+    // }
+  }
+
+  Future post() async {
     try {
-      final signInWithGoogleEndpoint = Uri(
-          scheme: 'https',
-          host: 'reqres.in',
-          path: 'api/unknown/2');
-      final http.Response response = await http.get(signInWithGoogleEndpoint);
+      final strConection = Connection.createConnection('api/users');
+      final dio = Dio();
+
+      final Response<dynamic> response = await dio
+          .post(strConection, data: {"name": "morpheus", "job": "leader"});
       if (response.statusCode == 200) {
-        final dynamic parsedData = jsonDecode(response.body);
-        print('parsedData.runtimeType ${parsedData.runtimeType}'); //para saber el tipo de dato que retorna
+        final dynamic parsedData = response;
+        print(
+            'parsedData.runtimeType ${parsedData.runtimeType}'); //para saber el tipo de dato que retorna
         print(parsedData);
         return 'ok';
       } else {
-        print('statusCode: ${response.statusCode}. class test_api.dart: error en el getTestAPI');
+        print(
+            'statusCode: ${response.statusCode}. class test_api.dart: error en el post');
         return {};
       }
-
     } catch (e) {
       print(e);
       return {};

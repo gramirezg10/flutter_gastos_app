@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:spends_app/src/api/spend_api.dart';
+import 'package:spends_app/src/api/test_api.dart';
+import 'package:spends_app/src/models/home_detail_model.dart';
+import 'package:spends_app/src/models/spend_detail_model.dart';
 import 'package:spends_app/src/models/spend_model.dart';
+import 'package:spends_app/src/util/dialogs.dart';
 
 class AddSpendTab extends StatefulWidget {
   @override
@@ -15,9 +20,11 @@ class _AddSpendTabState extends State<AddSpendTab> {
 
   Spend _spend = Spend();
 
-  // List<Map<String, SpendDetail>> _listSpendDetail = [{}];
-  final List<SpendDetail> _listSpendDetail = [];
-  final List<HomeDetail> _listSpendHomeDetail = [];
+  // final List<SpendDetail> _listSpendDetail = [];
+  // final List<HomeDetail> _listSpendHomeDetail = [];
+
+  final List _listSpendDetail = [];
+  final List _listSpendHomeDetail = [];
 
   TextEditingController _controllerDate = new TextEditingController();
   TextEditingController _controllerDesc = new TextEditingController();
@@ -63,9 +70,13 @@ class _AddSpendTabState extends State<AddSpendTab> {
               ),
               SizedBox(height: 10),
               _spendDetailDescAndAmount(),
-              Divider(height: 40, thickness: 1),
+              (_listSpendDetail.length > 0)
+                  ? Divider(height: 40, thickness: 1)
+                  : Text(''),
               _listTileSDGenerator(),
-              Divider(height: 40, thickness: 1),
+              (_listSpendDetail.length > 0)
+                  ? Divider(height: 40, thickness: 1)
+                  : Text(''),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -77,10 +88,13 @@ class _AddSpendTabState extends State<AddSpendTab> {
               ),
               SizedBox(height: 10),
               _spendHomeDetailDescAndAmount(),
-              SizedBox(height: 10),
-              SizedBox(height: 10),
+              (_listSpendHomeDetail.length > 0)
+                  ? Divider(height: 40, thickness: 1)
+                  : Text(''),
               _listTileHDGenerator(),
-              Divider(height: 40, thickness: 1),
+              (_listSpendHomeDetail.length > 0)
+                  ? Divider(height: 40, thickness: 1)
+                  : Text(''),
 
               CupertinoButton(
                 child: Text('Listo!'),
@@ -355,10 +369,9 @@ class _AddSpendTabState extends State<AddSpendTab> {
       SpendDetail _spendD = SpendDetail();
       _spendD.SDDesc = _controllerSDDesc.text;
       _spendD.SDAmount = double.parse(_controllerSDAmount.text);
-      _listSpendDetail.add(_spendD);
+      _listSpendDetail
+          .add('${_controllerSDDesc.text}/${_controllerSDAmount.text}');
 
-      _listSpendDetail.forEach((item) =>
-          print('item SD: ' + item.SDDesc + ' - ' + item.SDAmount.toString()));
       _controllerSDDesc.clear();
       _controllerSDAmount.clear();
       setState(() => _listTileSDGenerator());
@@ -374,10 +387,9 @@ class _AddSpendTabState extends State<AddSpendTab> {
       HomeDetail _spendHD = HomeDetail();
       _spendHD.HDDesc = _controllerHDDesc.text;
       _spendHD.HDAmount = double.parse(_controllerHDAmount.text);
-      _listSpendHomeDetail.add(_spendHD);
+      _listSpendHomeDetail
+          .add('${_controllerHDDesc.text}/${_controllerHDAmount.text}');
 
-      _listSpendHomeDetail.forEach((item) =>
-          print('item HD: ' + item.HDDesc + ' - ' + item.HDAmount.toString()));
       _controllerHDDesc.clear();
       _controllerHDAmount.clear();
       setState(() => _listTileHDGenerator());
@@ -390,12 +402,14 @@ class _AddSpendTabState extends State<AddSpendTab> {
   Widget _listTileSDGenerator() {
     List<Widget> _list = [];
     _listSpendDetail.forEach((item) {
+      print(item);
+      final _item = item.split('/');
       final Widget _listTileItem = ListTile(
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${item.SDAmount}'),
-        subtitle: Text('${item.SDDesc}'),
+        title: Text('${_item[1]}'),
+        subtitle: Text('${_item[0]}'),
       );
       _list..add(_listTileItem);
     });
@@ -407,12 +421,14 @@ class _AddSpendTabState extends State<AddSpendTab> {
   Widget _listTileHDGenerator() {
     List<Widget> _list = [];
     _listSpendHomeDetail.forEach((item) {
+      print(item);
+      final _item = item.split('/');
       final Widget _listTileItem = ListTile(
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${item.HDAmount}'),
-        subtitle: Text('${item.HDDesc}'),
+        title: Text('${_item[1]}'),
+        subtitle: Text('${_item[0]}'),
       );
       _list..add(_listTileItem);
     });
@@ -423,22 +439,36 @@ class _AddSpendTabState extends State<AddSpendTab> {
 
   // ::::::::::::::
 
-  void _submit() {
+  void _submit() async {
     final bool isValid = _formKey.currentState.validate();
     if (isValid) {
-      print('ir al backend con _spend');
-      print('_spend.date ${_spend.date}');
-      print('_spend.description ${_spend.description}');
-      print('_spend.amount ${_spend.amount}');
-      _listSpendDetail.forEach(
-          (item) => print('spend detail: ${item.SDDesc} - ${item.SDAmount}'));
-      _listSpendHomeDetail.forEach((item) =>
-          print('spend home detail: ${item.HDDesc} - ${item.HDAmount}'));
-      print('Spend.spendDetail ${_spend.sd_homeDetail}');
-      _spend.sd_spendDetail = _listSpendDetail;
-      print('Spend.spendDetail ${_spend.sd_homeDetail}');
+      final isOk = await Dialogs.confirm(context,
+          title: '¿Desea registrar ya su ingreso?');
+      if (isOk) {
+        _spend.description = _controllerDesc.text;
+        _spend.amount = double.parse(_controllerAmount.text);
+        _createSpend(_spend);
+      }
     } else
       return;
     return;
+  }
+
+  _createSpend(Spend spend) async {
+    print('object');
+    final _spendAPI = SpendAPI();
+    final _spendsData = await _spendAPI.postSpend(
+        spend, _listSpendDetail, _listSpendHomeDetail);
+    print('_loadData________________ $_spendsData');
+    if (_spendsData['_id'] != null) {
+      Dialogs.alert(context, title: 'Ingreso creado');
+      setState(() {
+        _controllerDate.clear();
+        _controllerDesc.clear();
+        _controllerAmount.clear();
+        _listSpendHomeDetail.clear();
+        _listSpendDetail.clear();
+      });
+    }
   }
 }

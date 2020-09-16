@@ -32,6 +32,8 @@ dependencies:
   intl: ^0.16.1
   flutter_localizations:
     sdk: flutter
+  dio: ^3.0.10
+  rxdart: ^0.24.1
   # shimmer: ^1.1.1
   # flutter_secure_storage: ^3.3.3
 

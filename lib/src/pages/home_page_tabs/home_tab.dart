@@ -1,6 +1,9 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spends_app/src/api/spend_api.dart';
+import 'package:spends_app/src/models/home_detail_model.dart';
+import 'package:spends_app/src/models/spend_detail_model.dart';
 import 'package:spends_app/src/models/spend_model.dart';
 
 class HomeTab extends StatefulWidget {
@@ -8,7 +11,17 @@ class HomeTab extends StatefulWidget {
   _HomeTabState createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
+
+@override
+  void afterFirstLayout(BuildContext context) {
+    Future.delayed(Duration(seconds: 2)).then((value){
+    });
+  }
+
+
+
+
   final _spendAPI = SpendAPI();
   Map<String, dynamic> _spendsData = {};
   Spend _spends = Spend(
