@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:spends_app/src/api/spend_api.dart';
+import 'package:spends_app/src/widgets/loader.dart';
 
 class AllSpendsTab extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class _AllSpendsTabState extends State<AllSpendsTab> {
   bool _isFetching = true;
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
+  final oCcy = new NumberFormat("#,##0.00", "en_US");
 
   @override
   void initState() {
@@ -27,7 +30,6 @@ class _AllSpendsTabState extends State<AllSpendsTab> {
   Future<Null> refreshList() async {
     setState(() => _isFetching = true);
     refreshKey.currentState?.show();
-    await Future.delayed(Duration(seconds: 2));
     final result = await _spendAPI.getAllSpend();
     if (result['ok']) {
       setState(() {
@@ -44,10 +46,7 @@ class _AllSpendsTabState extends State<AllSpendsTab> {
     print('--- all spends tab');
 
     return Container(
-      // color: Colors.black12,
       padding: EdgeInsets.zero,
-      width: double.infinity,
-      height: double.infinity,
       child: LayoutBuilder(builder: (context, constraints) {
         return resultData != null
             ? RefreshIndicator(
@@ -56,143 +55,90 @@ class _AllSpendsTabState extends State<AllSpendsTab> {
                 child: Container(
                   padding: EdgeInsets.only(left: 10, bottom: 5, right: 10),
                   alignment: Alignment.center,
-                  child: _isFetching ? Container(
-                color: Colors.white70,
-                child: Center(
-                  child: CupertinoActivityIndicator(
-                    radius: 15,
-                  ),
-                ),
-              )
-            :
-                  
-                  SingleChildScrollView(
-                    // padding: EdgeInsets.only(bottom: 300),
-                    child: Column(
-                      children: [
-                        Container(
-                          // color: Colors.black26,
-                          width: double.infinity,
-                          height: constraints.maxHeight * 0.09,
-                          // height: 100,
-                          alignment: Alignment.center,
+                  child: _isFetching
+                      ? Loader()
+                      : SingleChildScrollView(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      'Ultimos 20 registros, deslice para refrescar',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 2.0,
-                                          color: Colors.black54)),
-                                ],
+                              Container(
+                                height: constraints.maxHeight * 0.09,
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        'Ultimos 20 registros, deslice aquí para refrescar',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1.0,
+                                            color: Colors.black54)),
+                                  ],
+                                ),
                               ),
+                              SizedBox(),
+                              Container(
+                                  height: constraints.maxHeight * .91,
+                                  child: ListView.builder(
+                                      padding:
+                                          EdgeInsets.only(left: 20, right: 20),
+                                      physics: BouncingScrollPhysics(),
+                                      itemBuilder: (_, i) {
+                                        final Map<String, dynamic> item =
+                                            resultData[i];
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: Color(0xFFF6F6F6),
+                                          ),
+                                          margin: EdgeInsets.all(
+                                              constraints.maxHeight * 0.010),
+                                          child: Column(children: [
+                                            Container(
+                                                padding: EdgeInsets.all(15),
+                                                child: Column(children: [
+                                                  Text(
+                                                    'Descripción: ${item['description']}',
+                                                    style: TextStyle(
+                                                        fontSize: _sizeS),
+                                                  ),
+                                                  Text('Fecha: ${item['date']}',
+                                                      style: TextStyle(
+                                                          fontSize: _sizeS)),
+                                                  Text(
+                                                      'Valor: ${oCcy.format(item['amount'])}',
+                                                      style: TextStyle(
+                                                          fontSize: _sizeS)),
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                      'Saldo: ${oCcy.format(item['balance'])}',
+                                                      style: TextStyle(
+                                                          fontSize: _sizeS,
+                                                          color:
+                                                              item['balance'] <
+                                                                      0
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                      .black)),
+                                                  Text(
+                                                      'Gastos generales: ${oCcy.format(item['balanceSpendDetail'])}',
+                                                      style: TextStyle(
+                                                          fontSize: _sizeS)),
+                                                  Text(
+                                                      'Gastos casa: ${oCcy.format(item['balanceHomeDetail'])}',
+                                                      style: TextStyle(
+                                                          fontSize: _sizeS))
+                                                ])),
+                                          ]),
+                                        );
+                                      },
+                                      itemCount: resultData.length))
                             ],
                           ),
                         ),
-                        SizedBox(),
-                        Container(
-                            // color: Color(0xB7B4B4),
-                            padding: EdgeInsets.only(bottom: 20),
-                            width: double.infinity,
-                            height: constraints.maxHeight * .95,
-                            child: ListView.builder(
-                                itemBuilder: (_, i) {
-                                  final Map<String, dynamic> item =
-                                      resultData[i];
-
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Color(0xFFEEEEEE),
-                                    ),
-                                    alignment: Alignment.center,
-                                    width: 120,
-                                    height: 150,
-                                    margin: EdgeInsets.all(
-                                        constraints.maxHeight * 0.015),
-                                    child: Column(children: [
-                                      Container(
-                                          padding: EdgeInsets.all(15),
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      'Descripción: ${item['description']}',
-                                                      style: TextStyle(
-                                                          fontSize: _sizeS),
-                                                    )
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        'Fecha: ${item['date']}',
-                                                        style: TextStyle(
-                                                            fontSize: _sizeS))
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        'Valor: ${item['amount']}',
-                                                        style: TextStyle(
-                                                            fontSize: _sizeS))
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        'Saldo: ${item['balance']}',
-                                                        style: TextStyle(
-                                                            fontSize: _sizeS))
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        'Gastos generales: ${item['balanceSpendDetail']}',
-                                                        style: TextStyle(
-                                                            fontSize: _sizeS))
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                        'Gastos casa: ${item['balanceHomeDetail']}',
-                                                        style: TextStyle(
-                                                            fontSize: _sizeS))
-                                                  ],
-                                                ),
-                                              ])),
-                                    ]),
-                                  );
-                                },
-                                itemCount: resultData.length))
-                      ],
-                    ),
-                  )
-                  
-                  ,
                 ))
-            : Container(
-                color: Colors.white70,
-                child: Center(
-                  child: CupertinoActivityIndicator(
-                    radius: 15,
-                  ),
-                ),
-              );
+            : Loader();
       }),
     );
   }
