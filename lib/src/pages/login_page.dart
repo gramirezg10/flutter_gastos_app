@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spends_app/src/api/google_signin_api.dart';
 import 'package:spends_app/src/pages/home_page.dart';
 import 'package:spends_app/src/util/dialogs.dart';
+import 'package:spends_app/src/widgets/loader.dart';
 import 'package:spends_app/src/widgets/my_btn2.dart';
 
 class LoginPage extends StatefulWidget {
@@ -201,14 +202,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           if (_isFetching)
             Positioned.fill(
-              child: Container(
-                color: Colors.white70,
-                child: Center(
-                  child: CupertinoActivityIndicator(
-                    radius: 15,
-                  ),
-                ),
-              ),
+              child: Loader()
             )
         ],
       )),

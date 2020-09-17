@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spends_app/src/pages/home_page.dart';
 import 'package:spends_app/src/pages/login_page.dart';
+import 'package:spends_app/src/widgets/loader.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -37,12 +38,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayoutMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: CupertinoActivityIndicator(
-          radius: 15,
-          animating: true,
-        ),
-      ),
+      body: Loader()
     );
   }
 
