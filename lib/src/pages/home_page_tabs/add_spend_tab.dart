@@ -19,11 +19,11 @@ class _AddSpendTabState extends State<AddSpendTab> {
 
   Spend _spend = Spend();
 
-  // final List<SpendDetail> _listSpendDetail = [];
-  // final List<HomeDetail> _listSpendHomeDetail = [];
+  // final List<SpendDetail> _listSpendDetail_ = [];
+  // final List<HomeDetail> _listSpendHomeDetail_ = [];
 
-  final List _listSpendDetail = [];
-  final List _listSpendHomeDetail = [];
+  List<SpendDetail> _listSpendDetail = [];
+  List<HomeDetail> _listSpendHomeDetail = [];
 
   TextEditingController _controllerDate = new TextEditingController();
   TextEditingController _controllerDesc = new TextEditingController();
@@ -368,8 +368,9 @@ class _AddSpendTabState extends State<AddSpendTab> {
       SpendDetail _spendD = SpendDetail();
       _spendD.SDDesc = _controllerSDDesc.text;
       _spendD.SDAmount = double.parse(_controllerSDAmount.text);
-      _listSpendDetail
-          .add('${_controllerSDDesc.text}/${_controllerSDAmount.text}');
+      _listSpendDetail.add(_spendD);
+      // _listSpendDetail
+      //     .add('${_controllerSDDesc.text}/${_controllerSDAmount.text}');
 
       _controllerSDDesc.clear();
       _controllerSDAmount.clear();
@@ -386,8 +387,9 @@ class _AddSpendTabState extends State<AddSpendTab> {
       HomeDetail _spendHD = HomeDetail();
       _spendHD.HDDesc = _controllerHDDesc.text;
       _spendHD.HDAmount = double.parse(_controllerHDAmount.text);
-      _listSpendHomeDetail
-          .add('${_controllerHDDesc.text}/${_controllerHDAmount.text}');
+      _listSpendHomeDetail.add(_spendHD);
+      // _listSpendHomeDetail
+      //     .add('${_controllerHDDesc.text}/${_controllerHDAmount.text}');
 
       _controllerHDDesc.clear();
       _controllerHDAmount.clear();
@@ -401,14 +403,12 @@ class _AddSpendTabState extends State<AddSpendTab> {
   Widget _listTileSDGenerator() {
     List<Widget> _list = [];
     _listSpendDetail.forEach((item) {
-      print(item);
-      final _item = item.split('/');
       final Widget _listTileItem = ListTile(
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${_item[1]}'),
-        subtitle: Text('${_item[0]}'),
+        title: Text('${item.SDAmount}'),
+        subtitle: Text('${item.SDDesc}'),
       );
       _list..add(_listTileItem);
     });
@@ -420,14 +420,12 @@ class _AddSpendTabState extends State<AddSpendTab> {
   Widget _listTileHDGenerator() {
     List<Widget> _list = [];
     _listSpendHomeDetail.forEach((item) {
-      print(item);
-      final _item = item.split('/');
       final Widget _listTileItem = ListTile(
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${_item[1]}'),
-        subtitle: Text('${_item[0]}'),
+        title: Text('${item.HDAmount}'),
+        subtitle: Text('${item.HDDesc}'),
       );
       _list..add(_listTileItem);
     });
@@ -446,27 +444,29 @@ class _AddSpendTabState extends State<AddSpendTab> {
       if (isOk) {
         _spend.description = _controllerDesc.text;
         _spend.amount = double.parse(_controllerAmount.text);
-        _createSpend(_spend);
+        _spend.sd_spendDetail = _listSpendDetail;
+        _spend.sd_homeDetail = _listSpendHomeDetail;
+        _createSpend(context, _spend);
       }
     } else
       return;
     return;
   }
 
-  _createSpend(Spend spend) async {
-    print('object');
+  _createSpend(BuildContext context, Spend spend) async {
     final _spendAPI = SpendAPI();
-    final _spendsData = await _spendAPI.postSpend(
-        spend, _listSpendDetail, _listSpendHomeDetail);
-    print('_loadData________________ $_spendsData');
+    final _spendsData = await _spendAPI.postSpend(spend);
+    print('_SpendCreated?________________ $_spendsData');
     if (_spendsData) {
-      Dialogs.alert(context, title: 'Ingreso creado');
+      // Dialogs.alert(context,
+      //     title: 'Ingreso creado',
+      //     body: 'Por favor cierre y vuelva a ingresar a la app');
       setState(() {
         _controllerDate.clear();
         _controllerDesc.clear();
         _controllerAmount.clear();
-        _listSpendHomeDetail.clear();
         _listSpendDetail.clear();
+        _listSpendHomeDetail.clear();
       });
     }
   }

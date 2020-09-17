@@ -1,6 +1,6 @@
 class Connection {
 
-  static String env = 'local';
+  static String env = 'pdn';
 
   static createConnection(String path) {
     if (env.toUpperCase() == 'LOCAL') {

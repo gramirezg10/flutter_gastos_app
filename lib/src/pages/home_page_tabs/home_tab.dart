@@ -12,15 +12,10 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
-
-@override
+  @override
   void afterFirstLayout(BuildContext context) {
-    Future.delayed(Duration(seconds: 2)).then((value){
-    });
+    Future.delayed(Duration(seconds: 2)).then((value) {});
   }
-
-
-
 
   final _spendAPI = SpendAPI();
   Map<String, dynamic> _spendsData = {};
@@ -51,8 +46,7 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
 
   _loadData() async {
     _spendsData = await _spendAPI.getSpend();
-    print('_loadData________________');
-    print('Balance: ${_spendsData["balance"]}');
+    print(_spendsData);
     // print('spends.runtimeType -- ${spends.runtimeType}'); //para saber el tipo de dato que returna la petición
     setState(() {
       // _spends.addAll(spends);
@@ -85,6 +79,9 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
               )
             : Column(
                 children: [
+                  FlatButton(
+                      onPressed: () => _loadData,
+                      child: Icon(Icons.refresh)),
                   Container(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,23 +95,31 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
                           ],
                         ),
                         Row(
-                          children: [Text('Fecha: ${_spendsData['date']}',
-                              style: TextStyle(fontSize: _sizeP))],
+                          children: [
+                            Text('Fecha: ${_spendsData['date']}',
+                                style: TextStyle(fontSize: _sizeP))
+                          ],
                         ),
                         Row(
-                          children: [Text('Valor: ${_spendsData['amount']}',
-                              style: TextStyle(fontSize: _sizeP))],
+                          children: [
+                            Text('Valor: ${_spendsData['amount']}',
+                                style: TextStyle(fontSize: _sizeP))
+                          ],
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Row(
-                          children: [Text('Saldo: ${_spendsData['balance']}',
-                              style: TextStyle(fontSize: _sizeP))],
+                          children: [
+                            Text('Saldo: ${_spendsData['balance']}',
+                                style: TextStyle(fontSize: _sizeP))
+                          ],
                         ),
                       ])),
                   Divider(height: 20),
-                  Text('Gastos generales', style: TextStyle(fontSize: _sizeS, fontWeight: FontWeight.bold)),
+                  Text('Gastos generales',
+                      style: TextStyle(
+                          fontSize: _sizeS, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (_, i) {
@@ -128,12 +133,16 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
                                 height: 10,
                               ),
                               Row(
-                                children: [Text('Descripción: ${item['SDDesc']}',
-                              style: TextStyle(fontSize: _sizeS))],
+                                children: [
+                                  Text('Descripción: ${item['SDDesc']}',
+                                      style: TextStyle(fontSize: _sizeS))
+                                ],
                               ),
                               Row(
-                                children: [Text('Valor: ${item['SDAmount']}',
-                              style: TextStyle(fontSize: _sizeS))],
+                                children: [
+                                  Text('Valor: ${item['SDAmount']}',
+                                      style: TextStyle(fontSize: _sizeS))
+                                ],
                               ),
                             ],
                           ),
@@ -143,7 +152,9 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
                     ),
                   ),
                   Divider(height: 20),
-                  Text('Gastos de la casa', style: TextStyle(fontSize: _sizeS, fontWeight: FontWeight.bold)),
+                  Text('Gastos de la casa',
+                      style: TextStyle(
+                          fontSize: _sizeS, fontWeight: FontWeight.bold)),
                   Expanded(
                     child: ListView.builder(
                       itemBuilder: (_, i) {
@@ -157,12 +168,16 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
                                 height: 10,
                               ),
                               Row(
-                                children: [Text('Descripción: ${item['HDDesc']}',
-                              style: TextStyle(fontSize: _sizeS))],
+                                children: [
+                                  Text('Descripción: ${item['HDDesc']}',
+                                      style: TextStyle(fontSize: _sizeS))
+                                ],
                               ),
                               Row(
-                                children: [Text('Valor: ${item['HDAmount']}',
-                              style: TextStyle(fontSize: _sizeS))],
+                                children: [
+                                  Text('Valor: ${item['HDAmount']}',
+                                      style: TextStyle(fontSize: _sizeS))
+                                ],
                               ),
                             ],
                           ),
