@@ -3,6 +3,7 @@ import 'package:spends_app/src/pages/home_page_tabs/add_spend_tab.dart';
 import 'package:spends_app/src/pages/home_page_tabs/all_spends_tab.dart';
 import 'package:spends_app/src/pages/home_page_tabs/home_tab.dart';
 import 'package:spends_app/src/pages/home_page_tabs/settings_tab.dart';
+import 'package:spends_app/src/pages/home_page_tabs/test_tab.dart';
 import 'package:spends_app/src/widgets/bottom_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:spends_app/src/widgets/my_appbar.dart';
@@ -35,6 +36,10 @@ class _HomePageState extends State<HomePage> {
         iconPath: 'assets/icons/settings3.svg',
         label: 'Ajustes',
         content: SettingsTab()),
+    BottomMenuItem(
+        iconPath: 'assets/icons/analyze.svg',
+        label: 'Pruebas',
+        content: TestTab()),
   ];
 
   @override
@@ -57,7 +62,6 @@ class _HomePageState extends State<HomePage> {
             onChanged: (int newCurrentPage) {
               setState(() {
                 _currentPage = newCurrentPage;
-                
               });
             }),
         body: SafeArea(
@@ -91,11 +95,3 @@ class _HomePageState extends State<HomePage> {
         )));
   }
 }
-
-// CupertinoButton(
-//           minSize: 0,
-//             child: Text('Agregar ingreso'),
-//             color: Colors.blue,
-//             onPressed: () {
-//               print('object');
-//             })

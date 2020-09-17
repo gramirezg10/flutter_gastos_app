@@ -45,14 +45,12 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
   }
 
   _loadData() async {
+    setState(() => _isFetching = true);
     _spendsData = await _spendAPI.getSpend();
-    print(_spendsData);
-    // print('spends.runtimeType -- ${spends.runtimeType}'); //para saber el tipo de dato que returna la petición
+    // print(_spendsData);
+    _isFetching = false;
     setState(() {
-      // _spends.addAll(spends);
-      // _spendHome.addAll(spends);
-
-      _isFetching = false;
+      
     });
   }
 
@@ -79,9 +77,8 @@ class _HomeTabState extends State<HomeTab> with AfterLayoutMixin {
               )
             : Column(
                 children: [
-                  FlatButton(
-                      onPressed: () => _loadData,
-                      child: Icon(Icons.refresh)),
+                  CupertinoButton(
+                      child: Icon(Icons.refresh), onPressed: () => _loadData()),
                   Container(
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
