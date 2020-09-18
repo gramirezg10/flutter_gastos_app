@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spends_app/src/api/google_signin_api.dart';
-import 'package:spends_app/src/api/test_api.dart';
 import 'package:spends_app/src/pages/login_page.dart';
 import 'package:spends_app/src/util/dialogs.dart';
 
@@ -13,7 +12,6 @@ class SettingsTab extends StatefulWidget {
 }
 
 class _SettingsTabState extends State<SettingsTab> {
-  bool testButton = false;
 
   _logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,6 +46,7 @@ class _SettingsTabState extends State<SettingsTab> {
   Widget build(BuildContext context) {
     print('--- Settings tab');
     return SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -74,35 +73,7 @@ class _SettingsTabState extends State<SettingsTab> {
                       ],
                     )),
                 onPressed: _confirmLogout),
-            //smoke test abajo
-            // CupertinoButton(
-            //     padding: EdgeInsets.all(15),
-            //     child: Container(
-            //         width: 180,
-            //         margin: EdgeInsets.zero,
-            //         child: Row(
-            //           mainAxisAlignment: MainAxisAlignment.center,
-            //           children: [
-            //             SvgPicture.asset(
-            //               'assets/icons/test.svg',
-            //               width: 30,
-            //             ),
-            //             SizedBox(width: 10),
-            //             Text(
-            //               'botón de prueba',
-            //               style:
-            //                   TextStyle(letterSpacing: 1, color: Colors.black),
-            //             ),
-            //           ],
-            //         )),
-            //     onPressed: _smokeTest)
           ],
         ));
   }
-
-  // _smokeTest() async {
-  //   final _api = TestAPI();
-  //   final response = await _api.post();
-  //   print('_loadData________________ $response');
-  // }
 }

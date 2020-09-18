@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+
 import 'package:spends_app/src/api/spend_api.dart';
 import 'package:spends_app/src/models/home_detail_model.dart';
 import 'package:spends_app/src/models/spend_detail_model.dart';
@@ -16,6 +18,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
   GlobalKey<FormState> _formKey = GlobalKey();
   FocusNode _fnDescription = FocusNode();
   FocusNode _fnAmount = FocusNode();
+  final oCcy = new NumberFormat("#,##0.00", "en_US");
 
   Spend _spend = Spend();
 
@@ -33,13 +36,27 @@ class _AddSpendTabState extends State<AddSpendTab> {
   TextEditingController _controllerHDDesc = new TextEditingController();
   TextEditingController _controllerHDAmount = new TextEditingController();
 
+  double _totalSpend = 0;
+  double _totalHome = 0;
+
   double _sizeP = 20;
   double _sizeS = 15;
+
+  bool init = true;
+
+  TextStyle _textStyle= TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
+
+// @override
+//   void initState() {
+//     super.initState();
+//     _controllerAmount.text = '0';
+//   }
 
   @override
   Widget build(BuildContext context) {
     print('--- add spend tab');
     return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
       child: Container(
         padding: EdgeInsets.only(left: 20, bottom: 20, right: 20),
         child: Form(
@@ -57,13 +74,29 @@ class _AddSpendTabState extends State<AddSpendTab> {
               _ingressDescription(),
               SizedBox(height: 10),
               _ingressAmount(),
+              if(!init) Container(
+                padding: EdgeInsets.symmetric(),
+                width: double.infinity,
+                child: Column(children: [
+                  if (_controllerAmount.text.isNotEmpty) Text('Ingreso: ${oCcy.format(double.parse(_controllerAmount.text))}',
+                      style: _textStyle),
+                  if (_controllerAmount.text.isNotEmpty) Text('Saldo  : ${_getBalancePayment()}',
+                      style: _textStyle),
+                ]),
+              ),
               Divider(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Gastos generales',
-                      style: TextStyle(
-                          fontSize: _sizeS, fontWeight: FontWeight.bold)),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Gastos generales',
+                          style: _textStyle),
+                      Text('Total: ${oCcy.format(_totalSpend.toInt())}',
+                          style: _textStyle),
+                    ],
+                  ),
                   _btnAddSpendDetail(),
                 ],
               ),
@@ -79,9 +112,14 @@ class _AddSpendTabState extends State<AddSpendTab> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Gastos de la casa',
-                      style: TextStyle(
-                          fontSize: _sizeS, fontWeight: FontWeight.bold)),
+                  Column(
+                    children: [
+                      Text('Gastos de la casa',
+                          style: _textStyle),
+                      Text('Total: ${oCcy.format(_totalHome.toInt())}',
+                          style: _textStyle),
+                    ],
+                  ),
                   _btnAddSpendHomeDetail(),
                 ],
               ),
@@ -120,10 +158,10 @@ class _AddSpendTabState extends State<AddSpendTab> {
               width: 10,
               height: 10,
               child: SvgPicture.asset(
-                'assets/icons/mail.svg',
+                'assets/icons/calendar.svg',
                 color: Colors.black54,
               )),
-          suffixIcon: Icon(Icons.date_range)),
+      ),
       keyboardType: TextInputType.datetime,
       keyboardAppearance: Brightness.light,
       textInputAction: TextInputAction.next,
@@ -148,8 +186,8 @@ class _AddSpendTabState extends State<AddSpendTab> {
               width: 10,
               height: 10,
               child: SvgPicture.asset(
-                'assets/icons/mail.svg',
-                color: Colors.black54,
+                'assets/icons/text.svg',
+                color: Colors.black87,
               ))),
       keyboardType: TextInputType.name,
       keyboardAppearance: Brightness.light,
@@ -164,8 +202,8 @@ class _AddSpendTabState extends State<AddSpendTab> {
 
   Widget _ingressAmount() {
     return TextFormField(
-      autofocus: false,
       controller: _controllerAmount,
+      autofocus: false,
       decoration: InputDecoration(
           labelText: 'Monto del ingreso',
           hintText: "1'000.000",
@@ -175,18 +213,32 @@ class _AddSpendTabState extends State<AddSpendTab> {
               width: 10,
               height: 10,
               child: SvgPicture.asset(
-                'assets/icons/mail.svg',
-                color: Colors.black54,
+                'assets/icons/money.svg',
+                color: Colors.black87,
               ))),
       keyboardType: TextInputType.number,
       keyboardAppearance: Brightness.light,
       textInputAction: TextInputAction.next,
+      onEditingComplete: () {
+        setState(() {
+          if (_controllerAmount.text.isNotEmpty) init = false;
+          else init = true;
+        });
+      },
       validator: (text) => _validateAmount(),
       focusNode: _fnAmount,
       // onFieldSubmitted: (text) {
       //   _focusNodePassword.nextFocus();
       // },
     );
+  }
+
+  String _getBalancePayment() {
+    if (_controllerAmount.text.isNotEmpty) {
+      return oCcy.format(
+          double.parse(_controllerAmount.text) - (_totalHome + _totalSpend));
+    }
+    return '0';
   }
 
   // Spend details
@@ -372,6 +424,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
       // _listSpendDetail
       //     .add('${_controllerSDDesc.text}/${_controllerSDAmount.text}');
 
+      _totalSpend = _totalSpend + _spendD.SDAmount;
       _controllerSDDesc.clear();
       _controllerSDAmount.clear();
       setState(() => _listTileSDGenerator());
@@ -391,6 +444,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
       // _listSpendHomeDetail
       //     .add('${_controllerHDDesc.text}/${_controllerHDAmount.text}');
 
+      _totalHome = _totalHome + double.parse(_controllerHDAmount.text);
       _controllerHDDesc.clear();
       _controllerHDAmount.clear();
       setState(() => _listTileHDGenerator());
@@ -407,7 +461,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${item.SDAmount}'),
+        title: Text('${oCcy.format(item.SDAmount)}'),
         subtitle: Text('${item.SDDesc}'),
       );
       _list..add(_listTileItem);
@@ -424,7 +478,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
         dense: true,
         enabled: false,
         visualDensity: VisualDensity.compact,
-        title: Text('${item.HDAmount}'),
+        title: Text('${oCcy.format(item.HDAmount)}'),
         subtitle: Text('${item.HDDesc}'),
       );
       _list..add(_listTileItem);
@@ -467,6 +521,8 @@ class _AddSpendTabState extends State<AddSpendTab> {
         _controllerAmount.clear();
         _listSpendDetail.clear();
         _listSpendHomeDetail.clear();
+        _totalSpend = 0;
+        _totalHome = 0;
       });
     }
   }
