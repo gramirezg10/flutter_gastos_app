@@ -44,7 +44,7 @@ class _AddSpendTabState extends State<AddSpendTab> {
 
   bool init = true;
 
-  TextStyle _textStyle= TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
+  TextStyle _textStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold);
 
 // @override
 //   void initState() {
@@ -74,16 +74,20 @@ class _AddSpendTabState extends State<AddSpendTab> {
               _ingressDescription(),
               SizedBox(height: 10),
               _ingressAmount(),
-              if(!init) Container(
-                padding: EdgeInsets.symmetric(),
-                width: double.infinity,
-                child: Column(children: [
-                  if (_controllerAmount.text.isNotEmpty) Text('Ingreso: ${oCcy.format(double.parse(_controllerAmount.text))}',
-                      style: _textStyle),
-                  if (_controllerAmount.text.isNotEmpty) Text('Saldo  : ${_getBalancePayment()}',
-                      style: _textStyle),
-                ]),
-              ),
+              if (!init)
+                Container(
+                  padding: EdgeInsets.symmetric(),
+                  width: double.infinity,
+                  child: Column(children: [
+                    if (_controllerAmount.text.isNotEmpty)
+                      Text(
+                          'Ingreso: ${oCcy.format(double.parse(_controllerAmount.text))}',
+                          style: _textStyle),
+                    if (_controllerAmount.text.isNotEmpty)
+                      Text('Saldo  : ${_getBalancePayment()}',
+                          style: _textStyle),
+                  ]),
+                ),
               Divider(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,13 +95,17 @@ class _AddSpendTabState extends State<AddSpendTab> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Gastos generales',
-                          style: _textStyle),
+                      Text('Gastos generales', style: _textStyle),
                       Text('Total: ${oCcy.format(_totalSpend.toInt())}',
                           style: _textStyle),
                     ],
                   ),
-                  _btnAddSpendDetail(),
+                  Row(
+                    children: [
+                      _clearListSpendDetail(),
+                      _btnAddSpendDetail(),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -114,13 +122,17 @@ class _AddSpendTabState extends State<AddSpendTab> {
                 children: [
                   Column(
                     children: [
-                      Text('Gastos de la casa',
-                          style: _textStyle),
+                      Text('Gastos de la casa', style: _textStyle),
                       Text('Total: ${oCcy.format(_totalHome.toInt())}',
                           style: _textStyle),
                     ],
                   ),
-                  _btnAddSpendHomeDetail(),
+                  Row(
+                    children: [
+                      _clearListSpendHomeDetail(),
+                      _btnAddSpendHomeDetail(),
+                    ],
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -150,17 +162,17 @@ class _AddSpendTabState extends State<AddSpendTab> {
       autofocus: false,
       controller: _controllerDate,
       decoration: InputDecoration(
-          labelText: 'Fecha del ingreso',
-          hintText: 'DD/MM/AAAA',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-          prefixIcon: Container(
-              padding: EdgeInsets.all(10),
-              width: 10,
-              height: 10,
-              child: SvgPicture.asset(
-                'assets/icons/calendar.svg',
-                color: Colors.black54,
-              )),
+        labelText: 'Fecha del ingreso',
+        hintText: 'DD/MM/AAAA',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        prefixIcon: Container(
+            padding: EdgeInsets.all(10),
+            width: 10,
+            height: 10,
+            child: SvgPicture.asset(
+              'assets/icons/calendar.svg',
+              color: Colors.black54,
+            )),
       ),
       keyboardType: TextInputType.datetime,
       keyboardAppearance: Brightness.light,
@@ -221,8 +233,10 @@ class _AddSpendTabState extends State<AddSpendTab> {
       textInputAction: TextInputAction.next,
       onEditingComplete: () {
         setState(() {
-          if (_controllerAmount.text.isNotEmpty) init = false;
-          else init = true;
+          if (_controllerAmount.text.isNotEmpty)
+            init = false;
+          else
+            init = true;
         });
       },
       validator: (text) => _validateAmount(),
@@ -325,42 +339,51 @@ class _AddSpendTabState extends State<AddSpendTab> {
   Widget _btnAddSpendDetail() {
     return Container(
       alignment: Alignment.centerRight,
-      child: Container(
-        alignment: Alignment.center,
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.black26,
-          shape: BoxShape.circle,
-        ),
-        child: CupertinoButton(
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            onPressed: _addSDDescAmount),
-      ),
+      child: CupertinoButton(
+          child: SvgPicture.asset(
+            'assets/icons/add.svg',
+            width: 30,
+            color: Colors.black,
+          ),
+          onPressed: _addSDDescAmount),
+    );
+  }
+
+  Widget _clearListSpendDetail() {
+    return Container(
+      child: CupertinoButton(
+          child: SvgPicture.asset(
+            'assets/icons/delete.svg',
+            width: 30,
+            color: Colors.black,
+          ),
+          onPressed: _clearListSD),
     );
   }
 
   Widget _btnAddSpendHomeDetail() {
     return Container(
       alignment: Alignment.centerRight,
-      child: Container(
-        alignment: Alignment.center,
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.black26,
-          shape: BoxShape.circle,
-        ),
-        child: CupertinoButton(
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            onPressed: _addHDDescAmount),
-      ),
+      child: CupertinoButton(
+          child: SvgPicture.asset(
+            'assets/icons/add.svg',
+            width: 30,
+            color: Colors.black,
+          ),
+          onPressed: _addHDDescAmount),
+    );
+  }
+
+  Widget _clearListSpendHomeDetail() {
+    return Container(
+      child: CupertinoButton(
+          child: SvgPicture.asset(
+            'assets/icons/delete.svg',
+            width: 30,
+            color: Colors.black,
+          ),
+          // onPressed: (){}),
+          onPressed: _clearListHD)
     );
   }
 
@@ -432,6 +455,22 @@ class _AddSpendTabState extends State<AddSpendTab> {
       print('objeto vacío');
       return;
     }
+  }
+
+  void _clearListSD() {
+    setState((){
+      _listSpendDetail.clear();
+      _totalSpend = 0;
+    });
+    return;
+  }
+
+  void _clearListHD() {
+    setState((){
+      _listSpendHomeDetail.clear();
+      _totalHome = 0;
+    });
+    return;
   }
 
   void _addHDDescAmount() {
