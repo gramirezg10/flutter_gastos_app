@@ -4,7 +4,7 @@ class Connection {
 
   static createConnection(String path) {
     if (env.toUpperCase() == 'LOCAL') {
-      final String uri = 'http://192.168.0.11:3000/$path';
+      final String uri = 'http://192.168.0.13:3000/$path';
       // final String uri = 'https://reqres.in/$path';
     return uri;
     } else {
